@@ -1,7 +1,6 @@
 package com.very.youxian.entity;
 
-public class User {
-	private String id;
+public class SnsapiUserinfoResponse extends BaseResponse {
 	private String openid;
 	private String nickname;
 	private String sex;
@@ -11,10 +10,6 @@ public class User {
 	private String headimgurl;
 	private String privilege;
 	private String unionid;
-
-	public String getId() {
-		return id;
-	}
 
 	public String getOpenid() {
 		return openid;
@@ -50,10 +45,6 @@ public class User {
 
 	public String getUnionid() {
 		return unionid;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public void setOpenid(String openid) {
@@ -94,8 +85,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", openid=" + openid + ", nickname=" + nickname + ", sex=" + sex + ", province=" + province + ", city=" + city + ", country=" + country + ", headimgurl=" + headimgurl
-				+ ", privilege=" + privilege + ", unionid=" + unionid + "]";
+		return "SnsapiUserinfoResponse [openid=" + openid + ", nickname=" + nickname + ", sex=" + sex + ", province=" + province + ", city=" + city + ", country=" + country + ", headimgurl="
+				+ headimgurl + ", privilege=" + privilege + ", unionid=" + unionid + ", errcode=" + errcode + ", errmsg=" + errmsg + "]";
 	}
 
 }
