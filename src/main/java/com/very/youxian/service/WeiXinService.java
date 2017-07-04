@@ -17,7 +17,7 @@ import com.very.youxian.util.Constants;
 
 @Component
 public class WeiXinService {
-	private static final Logger LOGGER = Logger.getLogger(WeiXinController.class);
+	private static final Logger LOGGER = Logger.getLogger(WeiXinService.class);
 	@Autowired
 	private WeiXinMapper wxMapper;
 	@Autowired

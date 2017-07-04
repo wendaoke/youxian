@@ -17,7 +17,7 @@ public class DiaoDian {
 	private String fish_type;
 	private String fish_desc;
 
-	private List<DiaoDianImage> images;
+	private List<ImageStore> images;
 	
 	public String getId() {
 		return id;
@@ -122,11 +122,11 @@ public class DiaoDian {
 	public void setFish_desc(String fish_desc) {
 		this.fish_desc = fish_desc;
 	}
-	public List<DiaoDianImage> getImages() {
+	public List<ImageStore> getImages() {
 		return images;
 	}
 
-	public void setImages(List<DiaoDianImage> images) {
+	public void setImages(List<ImageStore> images) {
 		this.images = images;
 	}
 

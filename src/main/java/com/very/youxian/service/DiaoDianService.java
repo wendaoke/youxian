@@ -7,12 +7,14 @@ import org.springframework.stereotype.Component;
 
 import com.mysql.jdbc.StringUtils;
 import com.very.youxian.dao.DiaoDianMapper;
+import com.very.youxian.dao.ImageStoreMapper;
 import com.very.youxian.entity.DiaoDian;
 @Component
 public class DiaoDianService {
 	@Autowired
 	private DiaoDianMapper diaodDianMapper;
-
+	@Autowired
+	private	ImageStoreMapper imageStoreMapper;
 	public List<DiaoDian> findDiaoDianByProvince(String province) {
 		return diaodDianMapper.findDiaoDianByProvince(province);
 	}
@@ -29,7 +31,7 @@ public class DiaoDianService {
 			return null;
 		}
 		DiaoDian dd = this.diaodDianMapper.findDiaoDianById(id);
-		dd.setImages(diaodDianMapper.findDiaoDianImages(dd.getId()));
+		dd.setImages(imageStoreMapper.findImageByItemId(dd.getId()));
 		return dd;
 	}
 

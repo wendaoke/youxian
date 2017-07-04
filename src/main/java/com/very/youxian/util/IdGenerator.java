@@ -30,7 +30,7 @@ public class IdGenerator{
 
   public static String uuid32(){
     UUID uuid = UUID.randomUUID();
-    return uuid.toString().replaceAll("-", "");
+    return uuid.toString();
   }
 
 }

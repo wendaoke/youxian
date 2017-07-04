@@ -9,6 +9,15 @@ import org.springframework.stereotype.Component;
 public class YouXianSetting {
 	private String appID;
 	private String appsecret;
+	private String uploadImagePath;
+	public String getUploadImagePath() {
+		return uploadImagePath;
+	}
+
+	public void setUploadImagePath(String uploadImagePath) {
+		this.uploadImagePath = uploadImagePath;
+	}
+
 	public String getAppID() {
 		return appID;
 	}
