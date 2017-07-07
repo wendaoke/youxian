@@ -17,9 +17,12 @@ public interface SecondHandMapper {
 			+ "values(#{id},#{title},#{content},#{province},#{city},#{area},#{address},#{contactWay},#{contactInfo},#{status},#{creator},#{updateTime})  ")
 	Integer addSecondHand(SecondHand secondhand);
 	
-	@Select("SELECT * FROM secondhand where creator = #{creator} ")
-	List<SecondHand> findSecondHandByCreator(@Param("creator") String creator);
+	@Select("SELECT * FROM secondhand where creator = #{creator} LIMIT #{start} , #{length} ")	
+	List<SecondHand> findSecondHandByCreator(@Param("creator") String creator,@Param("start") Integer start,@Param("length") Integer length);
 
+	@Select("SELECT count(*) FROM secondhand where creator = #{creator} ")	
+	Integer findCountSecondHandByCreator(@Param("creator") String creator);
+	
 	@Select("SELECT * FROM secondhand WHERE area like CONCAT('%','${query}','%' )   LIMIT #{start} , #{length} ")	
 	List<SecondHand> findSecondHand(@Param("query") String query,@Param("start") Integer start,@Param("length") Integer length);
 

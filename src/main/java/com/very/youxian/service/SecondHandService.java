@@ -21,8 +21,12 @@ private SecondHandMapper secondHandMapper;
 	public Integer addSecondHand(SecondHand secondHand){
 		return secondHandMapper.addSecondHand(secondHand);
 	}
-	public List<SecondHand> findSecondHandByCreator(String creator){
-		return secondHandMapper.findSecondHandByCreator(creator);
+	
+	public Integer findCountSecondHandByCreator(String creator ){
+		return secondHandMapper.findCountSecondHandByCreator(creator);
+	}
+	public List<SecondHand> findSecondHandByCreator(String creator,Integer start,Integer length){
+		return secondHandMapper.findSecondHandByCreator(creator, start,length);
 	}
 	
 	public List<SecondHand> findSecondHand(String query,Integer start, Integer length){

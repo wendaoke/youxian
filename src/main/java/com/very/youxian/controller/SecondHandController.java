@@ -2,6 +2,8 @@ package com.very.youxian.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,9 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.jdbc.StringUtils;
-import com.very.youxian.entity.DiaoDian;
 import com.very.youxian.entity.SecondHand;
+import com.very.youxian.entity.User;
 import com.very.youxian.service.SecondHandService;
+import com.very.youxian.util.HttpUtil;
 import com.very.youxian.util.Pager;
 
 @RestController
@@ -51,6 +54,29 @@ public class SecondHandController {
 		pager.setTotalRow(totalRow);
 		List<SecondHand> ddlst = secondHandService.findSecondHand(queryString,pager.getStart(),pager.getPageSize());
 		pager.setList(ddlst);
+		return pager;
+	}
+	
+	@CrossOrigin
+	@RequestMapping("/mylist")
+	@ResponseBody
+	public Pager<SecondHand>  mySecondHandList(HttpServletRequest request,@RequestParam("pageSize") Integer pageSize,@RequestParam("currentPage") Integer currentPage) {
+
+		Pager<SecondHand> pager = new Pager<SecondHand>();
+		pager.setPageSize(pageSize);
+		pager.setCurPage(currentPage);
+		User user = HttpUtil.getSessionUser(request.getSession());
+		if(null == user){
+			pager.setTotalRow(0);
+			pager.setList(null);	
+		}else{
+			String creator = user.getId();
+			int totalRow = secondHandService.findCountSecondHandByCreator(creator);
+			pager.setTotalRow(totalRow);
+			List<SecondHand> ddlst = secondHandService.findSecondHand(creator,pager.getStart(),pager.getPageSize());
+			pager.setList(ddlst);	
+		}
+
 		return pager;
 	}
 	

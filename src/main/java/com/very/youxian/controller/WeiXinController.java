@@ -22,6 +22,7 @@ import com.very.youxian.entity.WeiXinUrl;
 import com.very.youxian.service.WeiXinService;
 import com.very.youxian.setting.YouXianSetting;
 import com.very.youxian.util.Constants;
+import com.very.youxian.util.HttpUtil;
 
 @RestController
 @ComponentScan
@@ -70,6 +71,7 @@ public class WeiXinController {
 		SnsapiUserinfoResponse useResponse = wxService.getWebPageAccessToken(code);
 		User user = new User();
 		BeanUtils.copyProperties(useResponse, user);
+		HttpUtil.saveSessionUser(request.getSession(), user);
 		return;
 	}
 }
