@@ -1,5 +1,6 @@
 package com.very.youxian.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,12 @@ private SecondHandMapper secondHandMapper;
 		return secondHandMapper.findSecondHandById(id);
 	}
 	public Integer addSecondHand(SecondHand secondHand){
+		secondHand.setUpdate_time(new Timestamp(System.currentTimeMillis()));
 		return secondHandMapper.addSecondHand(secondHand);
+	}
+	public Integer updateSecondHand(SecondHand secondhand){
+		secondhand.setUpdate_time(new Timestamp(System.currentTimeMillis()));
+		return secondHandMapper.updateSecondHand(secondhand);
 	}
 	
 	public Integer findCountSecondHandByCreator(String creator ){

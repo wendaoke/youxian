@@ -128,7 +128,8 @@ public class SecondHand {
 	}
 
 	public String getUpateTime() {
-		return DateUtil.getStringFromTimeStamp(update_time);
+		upateTime = DateUtil.getStringFromTimeStamp(update_time);
+		 return upateTime;
 	}
 
 	public void setUpateTime(String upateTime) {

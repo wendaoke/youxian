@@ -1,11 +1,14 @@
 package com.very.youxian.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,10 +38,17 @@ public class ImageController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping(value = "/findimagebyitemid", method = RequestMethod.POST)
+	@ResponseBody
+	public List<ImageStore> findImageByItemId(@RequestBody ImageStore image) {
+		List<ImageStore> imglst = imageStoreService.findImageByItemId(image.getItemId());
+		return imglst;
+	}
+	
+	@CrossOrigin
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public Integer deleteImage(@RequestBody ImageStore image) {
-		image.setImageId(IdGenerator.uuid32());
 		Integer result = imageStoreService.deleteImageByName(image.getItemId(),image.getImageName());
 		return result;
 	}	

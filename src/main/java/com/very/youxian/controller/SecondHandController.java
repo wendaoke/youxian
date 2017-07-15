@@ -43,6 +43,14 @@ public class SecondHandController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public Integer updateSecondHand(@RequestBody SecondHand secondhand) {
+		Integer result = secondHandService.updateSecondHand(secondhand);
+		return result;
+	}
+	
+	@CrossOrigin
 	@RequestMapping("/list")
 	@ResponseBody
 	public Pager<SecondHand>  secondHandList(@RequestParam("pageSize") Integer pageSize,@RequestParam("currentPage") Integer currentPage,@RequestParam("queryString") String queryString) {
