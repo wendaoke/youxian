@@ -25,25 +25,29 @@ public class WeiXinJobs {
 
 	@Scheduled(fixedDelay = ONE_HOUR)
 	public void fixedDelayJob() {
-		WeiXinUrl url = wxService.loadByName(Constants.ACCESS_TOKEN_CODE);
-		TokenResponse res = SimpleRestClient.getClient().getForObject(url.getUrl(), TokenResponse.class, yxSetting.getAppID(), yxSetting.getAppsecret());
-		if (StringUtils.isEmpty(res.getErrcode())) {
-			Constants.ACCESS_TOKEN = res.getAccess_token();
-		} else {
-			LOGGER.error(res.toString());
+		try {
+			WeiXinUrl url = wxService.loadByName(Constants.ACCESS_TOKEN_CODE);
+			LOGGER.info("url:" + url.toString() + ";yxSetting:" + yxSetting.toString());
+			TokenResponse res = SimpleRestClient.getClient().getForObject(url.getUrl(), TokenResponse.class, yxSetting.getAppID(), yxSetting.getAppsecret());
+			if (StringUtils.isEmpty(res.getErrcode())) {
+				Constants.ACCESS_TOKEN = res.getAccess_token();
+			} else {
+				LOGGER.error(res.toString());
+			}
+			LOGGER.error("ACCESS_TOKEN:" + Constants.ACCESS_TOKEN);
+		} catch (Exception ex) {
+			LOGGER.error(ex.toString(), ex);
 		}
-		LOGGER.error("ACCESS_TOKEN:" + Constants.ACCESS_TOKEN);
+		// @Scheduled(fixedRate=ONE_Minute)
+		// public void fixedRateJob(){
+		// System.out.println(Dates.format_yyyyMMddHHmmss(new Date())+"
+		// >>fixedRate执行....");
+		// }
+
+		// @Scheduled(cron="0 15 3 * * ?")
+		// public void cronJob(){
+		// System.out.println(Dates.format_yyyyMMddHHmmss(new Date())+"
+		// >>cron执行....");
+		// }
 	}
-
-	// @Scheduled(fixedRate=ONE_Minute)
-	// public void fixedRateJob(){
-	// System.out.println(Dates.format_yyyyMMddHHmmss(new Date())+"
-	// >>fixedRate执行....");
-	// }
-
-	// @Scheduled(cron="0 15 3 * * ?")
-	// public void cronJob(){
-	// System.out.println(Dates.format_yyyyMMddHHmmss(new Date())+"
-	// >>cron执行....");
-	// }
 }

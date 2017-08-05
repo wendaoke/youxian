@@ -2,9 +2,9 @@ package com.very.youxian.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.jdbc.StringUtils;
+import com.very.youxian.entity.SessionUser;
 import com.very.youxian.entity.User;
 import com.very.youxian.entity.UserExtraInfo;
+import com.very.youxian.service.SessionUserService;
 import com.very.youxian.service.UserExtraInfoService;
 import com.very.youxian.util.HttpUtil;
 import com.very.youxian.util.IdGenerator;
@@ -26,16 +28,20 @@ import com.very.youxian.util.IdGenerator;
 public class UserController {
 	@Autowired
 	private UserExtraInfoService service;
-
+	@Autowired
+	private SessionUserService sessionUserService;
 	@CrossOrigin
 	@RequestMapping(value = "/getcurrentuser", method = RequestMethod.POST)
 	@ResponseBody
 	public UserExtraInfo getCurrentUser(HttpServletRequest request) {
-		User user = HttpUtil.getSessionUser(request.getSession());
-		if (ObjectUtils.isEmpty(user)||StringUtils.isEmptyOrWhitespaceOnly(user.getId())) {
+		String sessionUserId = HttpUtil.getSessionUser(request.getSession());
+		if (StringUtils.isNullOrEmpty(sessionUserId)) {
 			return new UserExtraInfo();
 		}
-		UserExtraInfo dd = service.findUserExtraInfoByUserId(user.getId());
+		SessionUser sUser = sessionUserService.findSessionUserById(sessionUserId);
+		UserExtraInfo dd = service.findUserExtraInfoByUserId(sUser.getId());
+		User user = new User();
+		BeanUtils.copyProperties(user,sUser);
 		dd.setUser(user);
 		return dd;
 	}
@@ -71,13 +77,17 @@ public class UserController {
 	@RequestMapping(value = "/updateextrainfo", method = RequestMethod.POST)
 	@ResponseBody
 	public Integer updateUserExtraInfo(HttpServletRequest request, @RequestBody UserExtraInfo userExtraInfo) {
-		User user = HttpUtil.getSessionUser(request.getSession());
-		if (user == null) {
+		String sessionUserId = HttpUtil.getSessionUser(request.getSession());
+		if (StringUtils.isNullOrEmpty(sessionUserId)) {
 			return 0;
 		}
-		userExtraInfo.setUserid(user.getId());
+		SessionUser sUser = sessionUserService.findSessionUserById(sessionUserId);
+		if (sUser == null) {
+			return 0;
+		}
+		userExtraInfo.setUserid(sUser.getId());
 		Integer result = 0;
-		if (null == service.findUserExtraInfoByUserId(user.getId())) {
+		if (null == service.findUserExtraInfoByUserId(sUser.getId())) {
 			userExtraInfo.setId(IdGenerator.uuid32());
 			result = service.addUserExtraInfo(userExtraInfo);
 		} else {

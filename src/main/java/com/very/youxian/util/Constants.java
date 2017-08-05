@@ -7,4 +7,6 @@ public class Constants {
 	public final static String WEBPAGE_ACCESS_TOKEN_GET="WEBPAGE_ACCESS_TOKEN_GET";
 	public final static String WEBPAGE_ACCESS_TOKEN_REFRESH="WEBPAGE_ACCESS_TOKEN_REFRESH";
 	public final static String WEBPAGE_ACCESS_TOKEN_USERINFO="WEBPAGE_ACCESS_TOKEN_USERINFO";
+	public final static String WEATHER_QUERY="WEATHER_QUERY";
+	public final static String BAIDU_POSITION_API="BAIDU_POSITION_API";
 }

@@ -10,6 +10,7 @@ public class YouXianSetting {
 	private String appID;
 	private String appsecret;
 	private String uploadImagePath;
+	private String domain;
 	public String getUploadImagePath() {
 		return uploadImagePath;
 	}
@@ -33,5 +34,19 @@ public class YouXianSetting {
 	public void setAppsecret(String appsecret) {
 		this.appsecret = appsecret;
 	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+	@Override
+	public String toString() {
+		return "YouXianSetting [appID=" + appID + ", appsecret=" + appsecret + ", uploadImagePath=" + uploadImagePath + ", domain=" + domain + "]";
+	}
+
 
 }

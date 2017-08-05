@@ -9,11 +9,29 @@ import com.very.youxian.entity.User;
 @Component
 public class UserService {
 	@Autowired
-private UserMapper userMapper;
-	public User findUserById(String id){
+	private UserMapper userMapper;
+
+	public User findUserById(String id) {
 		return userMapper.findUserById(id);
 	}
-	public Integer addUser(User user){
+
+	public User findUserByOpenId(String openId) {
+		return userMapper.findUserByOpenId(openId);
+	}
+
+	public Integer addUser(User user) {
 		return userMapper.addUser(user);
+	}
+
+	public Integer updateUser(User user) {
+		return userMapper.updateUser(user);
+	}
+
+	public Integer checkUser(User user) {
+		if (null == findUserByOpenId(user.getOpenid())) {
+			return addUser(user);
+		} else {
+			return updateUser(user);
+		}
 	}
 }

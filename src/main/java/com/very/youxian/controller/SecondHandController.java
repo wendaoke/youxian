@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.jdbc.StringUtils;
 import com.very.youxian.entity.SecondHand;
+import com.very.youxian.entity.SessionUser;
 import com.very.youxian.entity.User;
 import com.very.youxian.service.SecondHandService;
+import com.very.youxian.service.SessionUserService;
 import com.very.youxian.util.HttpUtil;
 import com.very.youxian.util.Pager;
 
@@ -28,6 +30,8 @@ import com.very.youxian.util.Pager;
 public class SecondHandController {
 	@Autowired
 	private SecondHandService secondHandService;
+	@Autowired
+	private SessionUserService sessionUserService;
 
 	@RequestMapping("/")
 	public String home() {
@@ -73,12 +77,13 @@ public class SecondHandController {
 		Pager<SecondHand> pager = new Pager<SecondHand>();
 		pager.setPageSize(pageSize);
 		pager.setCurPage(currentPage);
-		User user = HttpUtil.getSessionUser(request.getSession());
-		if(null == user){
+		String sessionUserId = HttpUtil.getSessionUser(request.getSession());
+		SessionUser sUser = sessionUserService.findSessionUserById(sessionUserId);
+		if(null == sUser){
 			pager.setTotalRow(0);
 			pager.setList(null);	
 		}else{
-			String creator = user.getId();
+			String creator = sUser.getId();
 			int totalRow = secondHandService.findCountSecondHandByCreator(creator);
 			pager.setTotalRow(totalRow);
 			List<SecondHand> ddlst = secondHandService.findSecondHand(creator,pager.getStart(),pager.getPageSize());
