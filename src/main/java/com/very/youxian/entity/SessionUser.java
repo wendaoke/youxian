@@ -20,4 +20,11 @@ public class SessionUser extends User {
 		this.lastUrl = lastUrl;
 	}
 
+	@Override
+	public String toString() {
+		return "SessionUser [sessionId=" + sessionId + ", lastUrl=" + lastUrl + ", getId()=" + getId() + ", getOpenid()=" + getOpenid() + ", getNickname()=" + getNickname() + ", getSex()=" + getSex()
+				+ ", getProvince()=" + getProvince() + ", getCity()=" + getCity() + ", getCountry()=" + getCountry() + ", getHeadimgurl()=" + getHeadimgurl() + ", getPrivilege()=" + getPrivilege()
+				+ ", getUnionid()=" + getUnionid() + ", toString()=" + super.toString() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + "]";
+	}
+
 }

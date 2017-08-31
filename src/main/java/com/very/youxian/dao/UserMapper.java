@@ -21,7 +21,7 @@ public interface UserMapper {
 			+ "values(#{id},#{openid},#{nickname},#{sex},#{province},#{city},#{country},#{headimgurl},#{privilege},#{unionid})  ")
 	Integer addUser(User user);
 	
-	@Update("update user set openid = #{openid},,nickname = #{nickname},sex = #{sex},province =#{province} ,city = #{city},"
+	@Update("update user set openid = #{openid},nickname = #{nickname},sex = #{sex},province =#{province} ,city = #{city},"
 			+ "country = #{country},headimgurl = #{headimgurl},privilege = #{privilege},unionid = #{unionid}"
 			+ " where openid = #{openid}")
 	Integer updateUser(User user);

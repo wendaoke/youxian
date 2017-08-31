@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,31 +61,35 @@ public class WeiXinController {
 	@CrossOrigin
 	@RequestMapping(value = "/checkuser")
 	@ResponseBody
-	public Result queryWebPageAccessCode(HttpServletRequest request, HttpServletResponse response) {
+	public Result queryWebPageAccessCode(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="redirect",defaultValue = "/")  String redirect) {
 		Result result = new Result();
 		result.setCode("");
 		WeiXinUrl wxUrl = wxService.loadByName(Constants.WEBPAGE_ACCESS_TOKEN_CODE);
 		LOGGER.info(wxUrl);
 		if (StringUtils.isNoneBlank(wxUrl.getUrl())) {
 			try {
-				String url = request.getRequestURI();
+				String url = StringUtils.isBlank(redirect)?"/":redirect;
 				String sessionUserId = HttpUtil.getSessionUser(request.getSession());
+				LOGGER.info("sessionUserId in session :"+sessionUserId+";url:"+url);	
 				if (StringUtils.isBlank(sessionUserId)) {
 					sessionUserId = IdGenerator.uuid19();
-					HttpUtil.saveSessionUserId(request.getSession(), sessionUserId);
 					SessionUser sUser = new SessionUser();
 					sUser.setSessionId(sessionUserId);
+					LOGGER.info("sessionUserId in user :"+sUser.getSessionId());	
 					sUser.setLastUrl(url);
 					sessionUserService.addSessionUser(sUser);
 				}
+				LOGGER.info("sessionUserId in generator :"+sessionUserId);
 				SessionUser sUser = sessionUserService.findSessionUserById(sessionUserId);
 				if (sUser == null || StringUtils.isBlank(sUser.getId())) {
+					HttpUtil.saveSessionUserId(request.getSession(), sUser.getId());
 					String tempContextUrl = yxSetting.getDomain()+"/weixin/getuser";
 					LOGGER.info("tempContextUrl:" + tempContextUrl);					
 				   String redirectUrl = wxUrl.getUrl().replace("SESSION_ID", sessionUserId).replace("WEIXIN_APPID", yxSetting.getAppID()).replace("WEIXIN_REDIRECT_URI",
 							URLEncoder.encode(tempContextUrl, "UTF-8"));
 					LOGGER.info("redirectUrl:" + redirectUrl);
     				result.setCode(redirectUrl);
+    				result.setDescription(sessionUserId);
 				}
 
 			} catch (IOException e) {
@@ -94,6 +99,7 @@ public class WeiXinController {
 
 		return result;
 	}
+	
 	@CrossOrigin
 	@RequestMapping(value = "/getuser", method = RequestMethod.GET)
 	public void getWebPageAccessCode(HttpServletRequest request, HttpServletResponse response, String code, String state, Model model) {
@@ -109,10 +115,13 @@ public class WeiXinController {
 			BeanUtils.copyProperties(useResponse, user);
 			userService.checkUser(user);
 			SessionUser sUser = sessionUserService.findSessionUserById(state);
+			String sessionId = sUser.getSessionId();
+			String lastUrl = sUser.getLastUrl();
 			if (sUser != null) {
 				BeanUtils.copyProperties(user, sUser);
-				sessionUserService.updateSessionUser(sUser);
-				response.sendRedirect(yxSetting.getDomain()+sUser.getLastUrl());
+				int result = sessionUserService.updateSessionUser(sUser);
+				LOGGER.info("user:"+user+",sUser:" + sUser+",update result:"+result);
+				response.sendRedirect(yxSetting.getDomain()+"/#"+lastUrl);
 			} else {
 				LOGGER.error("state:" + state + ", we can not find the session user!");
 			}

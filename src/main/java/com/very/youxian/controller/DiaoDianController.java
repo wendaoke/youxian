@@ -31,7 +31,7 @@ public class DiaoDianController {
 	@CrossOrigin
 	@RequestMapping("/list")
 	@ResponseBody
-	public Pager<DiaoDian>  diaoDianList(@RequestParam("pageSize") Integer pageSize,@RequestParam("currentPage") Integer currentPage,@RequestParam("queryString") String queryString) {
+	public Pager<DiaoDian>  diaoDianList(@RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,@RequestParam(value="currentPage",defaultValue = "1") Integer currentPage,@RequestParam(value="queryString",defaultValue = "") String queryString) {
 
 		Pager<DiaoDian> pager = new Pager<DiaoDian>();
 		pager.setPageSize(pageSize);
