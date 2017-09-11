@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.jdbc.StringUtils;
 import com.very.youxian.entity.Comment;
-import com.very.youxian.entity.User;
+import com.very.youxian.entity.SessionUser;
 import com.very.youxian.service.CommentService;
+import com.very.youxian.service.SessionUserService;
 import com.very.youxian.service.UserService;
 import com.very.youxian.util.IdGenerator;
 import com.very.youxian.util.Pager;
@@ -28,6 +29,8 @@ public class CommentController {
 	private CommentService commentService;
 	@Autowired
 	private UserService userService;
+	@Autowired	
+	private SessionUserService sessionUserService;
 
 	@RequestMapping("/")
 	public String home() {
@@ -54,15 +57,17 @@ public class CommentController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Integer diaoDianCommentAdd(@RequestBody Comment comment) {
-		String userId = comment.getCommentator_id();
-		if (StringUtils.isEmptyOrWhitespaceOnly(userId)) {
-			return 0;
+		String sessionId = comment.getCommentator_id();
+		if (!StringUtils.isEmptyOrWhitespaceOnly(sessionId)) {
+			SessionUser sUser = sessionUserService.findSessionUserById(sessionId);
+			if(sUser != null){
+				comment.setId(IdGenerator.uuid32());
+				comment.setCommentator_id(sUser.getId());
+				comment.setCommentator_headimg(sUser.getHeadimgurl());
+				comment.setCommentator_name(sUser.getNickname());
+			}
 		}
-		User user = userService.findUserById(userId);
-		comment.setId(IdGenerator.uuid32());
-		comment.setCommentator_id(user.getId());
-		comment.setCommentator_headimg(user.getHeadimgurl());
-		comment.setCommentator_name(user.getNickname());
+
 		commentService.addComment(comment);
 		return 1;
 	}

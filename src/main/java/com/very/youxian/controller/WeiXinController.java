@@ -115,7 +115,6 @@ public class WeiXinController {
 			BeanUtils.copyProperties(useResponse, user);
 			userService.checkUser(user);
 			SessionUser sUser = sessionUserService.findSessionUserById(state);
-			String sessionId = sUser.getSessionId();
 			String lastUrl = sUser.getLastUrl();
 			if (sUser != null) {
 				BeanUtils.copyProperties(user, sUser);

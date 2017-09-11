@@ -2,6 +2,8 @@ package com.very.youxian.entity;
 
 import java.sql.Timestamp;
 
+import com.very.youxian.util.DateUtil;
+
 public class Comment {
 	private String id;
 	private int type;
@@ -11,7 +13,8 @@ public class Comment {
 	private String commentator_name;
 	private String commentator_headimg;
 	private Timestamp update_time;
-
+    private String showTime;
+    
 	public String getId() {
 		return id;
 	}
@@ -74,6 +77,14 @@ public class Comment {
 
 	public void setUpdate_time(Timestamp update_time) {
 		this.update_time = update_time;
+	}
+
+	public String getShowTime() {
+		return DateUtil.getStringFromTimeStamp(update_time);
+	}
+
+	public void setShowTime(String showTime) {
+		this.showTime = showTime;
 	}
 
 }
