@@ -57,6 +57,10 @@ public class WeiXinController {
 		LOGGER.info("echostr:" + echostr);
 		return echostr;
 	}
+	@RequestMapping(value = "/getjsticket",method = RequestMethod.GET)
+	public String getjsticket() {
+		return Constants.JSAPI_TICKET;
+	}
 	
 	@CrossOrigin
 	@RequestMapping(value = "/checkuser")

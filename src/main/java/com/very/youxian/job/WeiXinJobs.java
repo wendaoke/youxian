@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.very.rest.client.SimpleRestClient;
-import com.very.youxian.controller.WeiXinController;
+import com.very.youxian.entity.JSTokenResponse;
 import com.very.youxian.entity.TokenResponse;
 import com.very.youxian.entity.WeiXinUrl;
 import com.very.youxian.service.WeiXinService;
@@ -34,7 +34,21 @@ public class WeiXinJobs {
 			} else {
 				LOGGER.error(res.toString());
 			}
+			
 			LOGGER.error("ACCESS_TOKEN:" + Constants.ACCESS_TOKEN);
+			
+			url = wxService.loadByName(Constants.JSAPI_TICKET_CODE);
+			
+			JSTokenResponse jsres = SimpleRestClient.getClient().getForObject(url.getUrl(), JSTokenResponse.class, Constants.ACCESS_TOKEN);
+			
+			if (Constants.SUCCESS_CODE.equalsIgnoreCase(jsres.getErrcode())) {
+				Constants.JSAPI_TICKET = jsres.getTicket();
+			} else {
+				LOGGER.error(res.toString());
+			}
+			
+			LOGGER.error("JSAPI_TICKET:" + Constants.JSAPI_TICKET);
+			
 		} catch (Exception ex) {
 			LOGGER.error(ex.toString(), ex);
 		}
